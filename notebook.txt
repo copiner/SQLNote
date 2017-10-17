@@ -132,13 +132,142 @@ insert into dt(dti)values('1990-10-01 13:14:52');
 枚举类型
 enum
 
+小案例
+name  : char(3)
+age   : tinyint unsigned
+email : varchar(30)
+tel   : char(11)
+intro : varchar(1000)
+salary: deciaml(7,2)
+graduate  : date
+
+create table stuinfo(
+id int primary key auto_increment,
+name char(3) not null default '',
+age tinyint unsigned not null default 0,
+email varchar(30) not null default '',
+tel char(11) not null default '',
+salary decimal(7, 2) not null default '6000.00',
+graduate date not null default '2015-10-10'
+)charset utf8;
+
+insert into stuinfo
+(name,age,email,tel,graduate)
+values
+('Fra',18,'fra@fra.com','13113113131','2016-06-10');
+//and
+insert into stuinfo
+values
+(3,'cal',21,'calcal@cal.com','13134533543','7000.00','2015-07-10');
+//and
+insert into stuinfo
+(name,age,tel)
+values
+('jac',23,'18666533543'),
+('ros',21,'18677533543'),
+('tom',25,'18699533543');
+
+update stuinfo
+set
+email="jac@jack.com",
+salary='3999.00'
+where id=4;
+
+delete from stuinfo where id=6;
+
+//
+invest : decimal(6,2)
+alter table stuinfo add invest decimal(6,2) unsigned not null default '1000.00';
+
+子句
+where
+group by
+having
+order by
+limit
+
+where
+<
+<=
+==
+in
+!= <>
+>=
+>
+between
+
+NOT !
+OR ||
+AND &&
 
 
+select * from stuinfo;
+select name,age,tel from stuinfo;
+select id,salary>6000 from stuinfo;
+select name,age,tel from stuinfo where salary>6000;
+select name,age,tel from stuinfo where salary-invest>6000;
+select name,age,tel from stuinfo where salary-invest>6000;
+select name,age,tel from stuinfo where salary in (6000,8000);
+select id,name,age,tel from stuinfo where salary between 6000 and 8000;
+select id,name,age,tel from stuinfo where salary > 6000 and salary < 8000;
+select id,name,age,tel from stuinfo where salary = 6000 or invest = 2000;
+
+通配符 %  _
+
+select id,name,age,tel from stuinfo where name like 'r%';
+select id,name,age,tel from stuinfo where name like 'r__';
 
 
+group by
 
+max
+min
+sum
+avg
+count
 
+select id,salary from stuinfo;
+select max(salary) from stuinfo;
+select min(salary) from stuinfo;
+select age,max(salary) from stuinfo group by age;
 
+select sum(salary) from stuinfo;
+select avg(salary) from stuinfo;
+select count(*) from stuinfo;
+select age,avg(salary) from stuinfo group by age;
+select age,count(salary) from stuinfo group by age;
 
+select id,salary-invest from stuinfo;
+select age,sum(salary-invest) from stuinfo group by age;
 
-end
+//alias
+select age,sum(salary-invest) as total from stuinfo group by age;
+
+having
+select id,salary-invest as income from stuinfo having income>6000;
+select id,salary-invest as income from stuinfo where age<20 having income>6000;
+select age,sum(salary-invest) as income from stuinfo group by age having income>10000;
+
+//练习
+create table stu(
+name char(10),
+subject char(10),
+score tinyint
+)charset utf8;
+
+insert into stu
+values
+('calvin','Math',90),
+('calvin','English',50),
+('calvin','Science',40),
+('francis','math',45),
+('francis','geo',55),
+('Anna','math',90);
+查询两门及两门以上不及格学生的平均成绩
+select name,score<60 from stu;
+select name,sum(score<60) from stu group by name;
+select name,sum(score<60),avg(score) as av from stu group by name;
+select name,sum(score<60) as su,avg(score) as av from stu group by name having su>=2;
+
+排序 order by
+select name,salary from stuinfo order by salary;
