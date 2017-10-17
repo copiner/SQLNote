@@ -54,6 +54,7 @@ select * from from where id > 1;
 select name, content from msg where id >1;
 
 存储范围
+
 整型
 Tinyint:1字节，8位  无符号0~255(0~2^8-1)，有符号(默认) -128~127(2^7-1)，最高位是符号位  (补码)
 Smallint:2字节
@@ -86,9 +87,11 @@ price float(6,2) not null default 0.00
 )charset utf8;
 
 insert into goods(name,price)values("cookie","12.789");
+
 定点型
 decimal(M,D), 4字节或者8字节
 alter table goods add decimalprice decimal(6,3) not null default 0.0;
+
 字符型
 char:char(M),M代表可容纳的字符数,(占空间)，0<=M<=255
 其占空间大小固定，若内容小于固定大小，仍占固定大小
@@ -96,4 +99,43 @@ varchar: varchar(M),M代表可容纳的字符数，(占空间)， 0<=M<=65535
 占空间大小不固定，若内容小于固定大小，按实际大小占居空间。
 text:
 
-日期时间型
+日期时间型(注意范围)
+Year        1990 (1901~2155)
+Date        1990-10-01
+Time        14:20:52
+Datetime    1990-02-11 08:00:00
+
+create table y(
+ye year(4)
+);
+insert into y values('1990');
+
+create table d(
+de date
+);
+insert into d values('1990-10-01');
+
+create table t(
+ti time
+);
+insert into t values('13:14:52');
+
+create table dt(
+dti datetime not null default '1000-01-01 00:00:00'
+);
+insert into dt(dti)values('1990-10-01 13:14:52');
+
+时间戳
+1970-01-01 00:00:00 距离当今的秒数
+用int型存储时间戳
+
+枚举类型
+enum
+
+
+
+
+
+
+
+end
