@@ -268,6 +268,88 @@ select name,score<60 from stu;
 select name,sum(score<60) from stu group by name;
 select name,sum(score<60),avg(score) as av from stu group by name;
 select name,sum(score<60) as su,avg(score) as av from stu group by name having su>=2;
+//利用子查询
+select name,count(*) as total from stu where score<60 group by name having total>=2;
+select name from (select name,count(*) as total from stu where score<60 group by name having total>=2) as temp;
+select name,avg(score) from stu where name in (select name from (select name,count(*) as total from stu where score<60 group by name having total>=2) as temp) group by name;
+
 
 排序 order by
 select name,salary from stuinfo order by salary;
+select name,salary from stuinfo order by salary desc;
+select name,salary from stuinfo order by salary asc;
+select name,age,salary from stuinfo order by age,salary;
+
+
+limit 限制
+limit [offset,]N
+offset 偏移量
+N 取条目数量
+
+select name,salary from stuinfo order by salary desc limit 3,3;
+select name,salary from stuinfo order by salary desc limit 0,3;
+
+小练习 每个年龄工资最高的条目
+select name,age,salary from stuinfo group by age;
+select age,salary from stuinfo order by age,salary desc;
+select * from (select age,salary from stuinfo order by age,salary desc) as temp group by age;
+
+
+子查询
+where
+from
+exists
+
+select name,age,salary from stuinfo where age = (select max(age) from stuinfo);
+
+select * from (select age,salary from stuinfo order by age,salary desc) as temp group by age;
+
+select age from stuinfo where exists(select * from stuin where stuin.age = stuinfo.age);
+
+
+union:联合 不同表之间
+select name,salary from stuinfo where salary > 8000;
+select name,salary from stuinfo where salary < 5000;
+select name,salary from stuinfo where salary > 8000 union select name,salary from stuinfo where salary < 5000;
+
+小案例
+create table ta(
+id char(1),
+num int
+);
+insert into ta
+values
+('a', 5),
+('b', 10),
+('c', 15),
+('d', 20);
+
+create table tb(
+id char(1),
+num int
+)
+
+insert into tb
+values
+('a', 50),
+('s', 55),
+('d', 60),
+('f', 65);
+
+select * from ta union select * from tb;
+select id,sum(num) from (select * from ta union select * from tb) as temp group by id;
+
+update tb set num=20 where id = 'd';
+
+如果不同的语句中取出的行，有完全相同的，相同的行将会合并。
+select * from ta union select * from tb;
+或者不合并
+select * from ta union all select * from tb;
+
+注意 : 与order by limit 连用需用括号来表明作用范围，以免出错
+
+
+
+清空表
+truncate stuinfo
+end
