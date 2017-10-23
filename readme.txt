@@ -346,9 +346,53 @@ select * from ta union select * from tb;
 或者不合并
 select * from ta union all select * from tb;
 
-注意 : 与order by limit 连用需用括号来表明作用范围，以免出错
+注意 : 与order by limit 连用需用括号来表明作用范围，以免出错。
 
 
+select * from ta,tb;
+左连接
+select * from ta left join tb on ta.id = tb.id;
+右连接
+select * from ta right join tb on ta.id = tb.id;
+内链接
+select * from ta inner join tb on ta.id = tb.id;
+
+小案例
+create table boy(
+name char(10),
+flower char(10)
+) charset utf8;
+
+insert into boy
+values
+('Calvin',"a rose"),
+('Couke',"a apple"),
+('Jay',"a sing"),
+('Jack',"a lover"),
+('Tanna',"a dog");
+
+create table girl(
+name char(10),
+flower char(10)
+) charset utf8;
+
+insert into girl
+values
+('Avle',"a rose"),
+('Anna',"a apple"),
+('Duan',"a singer"),
+('Mury',"a singer"),
+('Milk',"a cat");
+
+select boy.*, girl.* from boy left join girl on boy.flower=girl.flower;
+select boy.*, girl.* from girl right join boy on boy.flower=girl.flower;
+
+select boy.*, girl.* from girl left join boy on boy.flower=girl.flower;
+select boy.*, girl.* from boy right join girl on boy.flower=girl.flower;
+
+select boy.*, girl.* from boy inner join girl on boy.flower=girl.flower;
+
+select boy.*, girl.* from girl left join boy on boy.flower=girl.flower union select boy.*, girl.* from girl right join boy on boy.flower=girl.flower;
 
 清空表
 truncate stuinfo
