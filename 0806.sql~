@@ -1,0 +1,3 @@
+select cust_id, cust_type_cd, fed_id,
+fed_id regexp '.{3}-.{2}-.{4}' is_ss_no_format
+from customer;

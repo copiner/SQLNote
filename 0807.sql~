@@ -1,0 +1,5 @@
+
+select account_id, sign(avail_balance),abs(avail_balance)
+from account;
+
+select str_to_date('September 17,2008','%M%d,%Y');
