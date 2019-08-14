@@ -1,0 +1,13 @@
+select p.name product, b.name branch,
+concat(e.fname, ' ', e.lname) name,
+sum(a.avail_banlace) tot_deposits
+from account a
+inner join employee e
+on a.open_emp_id = e.emp_id
+inner join branch b
+on a.open_branch_id = b.branch_id
+inner join product p
+on a.product_cd = p.product_cd
+where p.product_type_cd = 'ACCOUNT'
+group by p.name, b.name, e.name, e.lname
+order vy 1, 2;

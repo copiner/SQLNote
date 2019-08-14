@@ -1,0 +1,96 @@
+
+select account_id, product_cd, cust_id, avail_balance
+from account
+where open_emp_id <>
+(select e.emp_id
+from employee e inner join branch b
+on e.assigned_branch_id = b.branch_id
+where e.title = 'Head Teller' and b.city = 'Woburn');
+
+---error
+select account_id, product_cd, cust_id, avail_balance
+from account
+where open_emp_id <>
+(select e.emp_id
+from employee e inner join branch b
+on e.assigned_branch_id = b.branch_id
+where e.title = 'Teller' and b.city = 'Woburn');
+
+select branch_id, name, city
+from branch
+where name in ('Headquarters','Quincy Branch');
+
+select emp_id, fname, lname, title
+from employee
+where emp_id in (
+select superior_emp_id
+from employee);
+
+select emp_id, fname, lname, title
+from employee
+where emp_id in (
+select distinct superior_emp_id
+from employee);
+
+
+select emp_id, fname, lname, title
+from employee
+where emp_id not in (
+select superior_emp_id
+from employee
+where superior_emp_id is not null);
+
+select emp_id, fname, lname, title
+from employee
+where emp_id not in (1,2,null);
+
+
+select emp_id, fname, lname, title
+from employee
+where emp_id <> all(
+select superior_emp_id
+from employee
+where superior_emp_id is not null);
+
+select account_id, cust_id, product_cd, avail_balance
+from account
+where avail_balance < all (
+select a.avail_balance
+from account a
+inner join individual i
+on a.cust_id = i.cust_id
+where i.fname = 'Frank' and i.lname = 'Tucker');
+
+
+select account_id, cust_id, product_cd, avail_balance
+from account
+where avail_balance > any (
+select a.avail_balance
+from account a
+inner join individual i
+on a.cust_id = i.cust_id
+where i.fname = 'Frank' and i.lname = 'Tucker');
+
+select account_id, product_cd, cust_id
+from account
+where open_branch_id = (
+select branch_id
+from branch
+where name = 'Woburn Branch')
+and open_emp_id
+in (
+select emp_id
+from employee
+where title = 'Teller' or title = 'Head Teller');
+
+
+select account_id, product_cd, cust_id,open_branch_id, open_emp_id
+from account
+where (open_branch_id, open_emp_id)
+in (
+select b.branch_id, e.emp_id
+from branch b
+inner join employee e
+on b.branch_id = e.assigned_branch_id
+where b.name = 'Woburn Branch'
+and (e.title = 'Teller' or e.title = 'Head Teller'));
