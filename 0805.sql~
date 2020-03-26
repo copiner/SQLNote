@@ -1,5 +1,0 @@
-select 'TND' type_cd, cust_id, lname name
-from individual
-union all
-select 'bus' type_cd, cust_id, name
-from business
