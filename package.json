@@ -1,0 +1,38 @@
+{
+  "name": "eggsev",
+  "version": "1.0.0",
+  "description": "list class sev",
+  "main": "index.js",
+  "scripts": {
+    "test": "egg-bin test",
+    "start": "egg-scripts start --daemon",
+    "stop": "egg-scripts stop",
+    "dev": "egg-bin dev",
+    "cov": "egg-bin cov"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "egg",
+    "mysql"
+  ],
+  "author": "copiner",
+  "license": "ISC",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "dependencies": {
+    "egg": "^2.26.0",
+    "egg-mysql": "^3.0.0",
+    "egg-scripts": "^2.13.0",
+    "egg-view-nunjucks": "^2.2.0",
+    "moment": "^2.25.3"
+  },
+  "devDependencies": {
+    "egg-bin": "^4.14.1",
+    "egg-mock": "^4.0.0"
+  }
+}
