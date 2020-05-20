@@ -7,5 +7,6 @@ module.exports = app => {
     router.get('/news', controller.news.list);
     router.get('/news/add', controller.news.add);
     router.get('/news/show', controller.news.show);
-        
+
+    router.resources('users', '/users', controller.users);
 };

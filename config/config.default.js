@@ -1,5 +1,5 @@
 // config/config.default.js
-
+/*
 exports.mysql = {
    // database configuration
    client: {
@@ -15,6 +15,9 @@ exports.mysql = {
    agent: false,
  };
 
+*/
+
+
 exports.keys = "wdaonngg";
 
 exports.view = {
@@ -29,4 +32,11 @@ exports.cluster = {
         port:7001,
         hostname:'127.0.0.1'
     }
+}
+
+exports.sequelize = {
+    dialect:'mysql',
+    host:'127.0.0.1',
+    port:3306,
+    database:'doc_default'
 }
