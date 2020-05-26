@@ -174,8 +174,8 @@ graduate  : date
 createtemp:  timestamp
 updatetemp:  timestamp
 ```
-```
 
+```
 create table planer(
   id int primary key auto_increment,
   name char(3) not null default '',
@@ -222,7 +222,7 @@ delete from planer where id=6;
 
 ```
 invest : decimal(6,2)
-alter table planer add invest decimal(6,2) unsigned not null default '1000.00';
+alter table planer add invest decimal(6,2) unsigned not null default '1000.00' after salary;
 alter table planer drop column invest;
 ```
 
@@ -263,12 +263,15 @@ select id,name,age,tel from planer where salary = 6000 or invest = 2000;
 
 通配符 %  _
 
-select id,name,age,tel from planer where name like 'r%';
-select id,name,age,tel from planer where name like 'r__';
-
-
-
 ```
+select * from planer p where p.name like '%a%';
+select * from planer p where p.name like 'a%';
+select * from planer p where p.name like '%a';
+
+select * from planer p where p.name like '__a';
+select * from planer p where p.name like '_al';
+```
+
 group by
 
 max
@@ -277,97 +280,107 @@ sum
 avg
 count
 
-select id,salary from stuinfo;
-select max(salary) from stuinfo;
-select min(salary) from stuinfo;
-select age,max(salary) from stuinfo group by age;
-
-select sum(salary) from stuinfo;
-select avg(salary) from stuinfo;
-select count(*) from stuinfo;
-select age,avg(salary) from stuinfo group by age;
-select age,count(salary) from stuinfo group by age;
-
-select id,salary-invest from stuinfo;
-select age,sum(salary-invest) from stuinfo group by age;
-
-//alias
-select age,sum(salary-invest) as total from stuinfo group by age;
 ```
+
+select id,salary from planer;
+select max(salary) from planer;
+select min(salary) from planer;
+select age,max(salary) from planer group by age;
+
+select sum(salary) from planer;
+select avg(salary) from planer;
+select count(*) from planer;
+select age,avg(salary) from planer group by age;
+select age,count(salary) from planer group by age;
+
+select id,salary-invest from planer;
+select age,sum(salary-invest) from planer group by age;
+
+# alias
+select age,sum(salary-invest) as total from planer group by age;
 ```
 having
-select id,salary-invest as income from stuinfo having income>6000;
-select id,salary-invest as income from stuinfo where age<20 having income>6000;
-select age,sum(salary-invest) as income from stuinfo group by age having income>10000;
 ```
 
-create table stu(
+select id,salary-invest as income from planer having income>6000;
+select id,salary-invest as income from planer where age<20 having income>6000;
+select age,sum(salary-invest) as income from planer group by age having income>10000;
+
+```
+
+create table student(
 name char(10),
 subject char(10),
 score tinyint
 )charset utf8;
 
-insert into stu
+insert into student
 values
 ('calvin','Math',90),
 ('calvin','English',50),
 ('calvin','Science',40),
-('francis','math',45),
-('francis','geo',55),
-('Anna','math',90);
+('francis','Math',45),
+('francis','Geography',55),
+('Anna','Math',90);
+
 查询两门及两门以上不及格学生的平均成绩
 
+alter table student add column id int not null primary key auto_increment first;
+
 ```
-select name,score<60 from stu;
-select name,sum(score<60) from stu group by name;
-select name,sum(score<60),avg(score) as av from stu group by name;
-select name,sum(score<60) as su,avg(score) as av from stu group by name having su>=2;
-//利用子查询
-select name,count(*) as total from stu where score<60 group by name having total>=2;
-select name from (select name,count(*) as total from stu where score<60 group by name having total>=2) as temp;
-select name,avg(score) from stu where name in (select name from (select name,count(*) as total from stu where score<60 group by name having total>=2) as temp) group by name;
+select name,score<60 from student;
+select name,sum(score<60) from student group by name;
+select name,sum(score<60), avg(score) as av from student group by name;
+select name,sum(score<60) as su, avg(score) as av from student group by name having su>=2;
+
+select name,sum(score<60) su, avg(score) av from student group by name having su>=2;
+```
+
+利用子查询
+```
+select name, count(*) as total from student where score<60 group by name having total>=2;
+
+select name from (select name,count(*) as total from student where score<60 group by name having total>=2) as temp;
+
+select name,avg(score) from student where name in (select name from (select name,count(*) as total from student where score<60 group by name having total>=2) as temp) group by name;
 
 ```
 
 排序 order by
-select name,salary from stuinfo order by salary;
-select name,salary from stuinfo order by salary desc;
-select name,salary from stuinfo order by salary asc;
-select name,age,salary from stuinfo order by age,salary;
 
+```
+select name,salary from planer order by salary;
+select name,salary from planer order by salary desc;
+select name,salary from planer order by salary asc;
+select name,age,salary from planer order by age,salary;
+```
 
 limit 限制
 limit [offset,]N
 offset 偏移量
 N 取条目数量
 ```
-select name,salary from stuinfo order by salary desc limit 3,3;
-select name,salary from stuinfo order by salary desc limit 0,3;
+select name,salary from planer order by salary desc limit 3,3;
+select name,salary from planer order by salary desc limit 0,3;
 ```
 
-小练习 每个年龄工资最高的条目
-select name,age,salary from stuinfo group by age;
-select age,salary from stuinfo order by age,salary desc;
-select * from (select age,salary from stuinfo order by age,salary desc) as temp group by age;
+每个年龄工资最高的条目
 
 
-子查询
-where
-from
-exists
 
 ```
-select name,age,salary from stuinfo where age = (select max(age) from stuinfo);
+select p.* from planer p, (select max(salary) sly, age from  planer group by age) as t
+where p.salary = t.sly and p.age = t.age
 
-select * from (select age,salary from stuinfo order by age,salary desc) as temp group by age;
-
-select age from stuinfo where exists(select * from stuin where stuin.age = stuinfo.age);
 ```
 
 union:联合 不同表之间
-select name,salary from stuinfo where salary > 8000;
-select name,salary from stuinfo where salary < 5000;
-select name,salary from stuinfo where salary > 8000 union select name,salary from stuinfo where salary < 5000;
+
+```
+select name,salary from planer where salary > 8000;
+select name,salary from planer where salary < 5000;
+select name,salary from planer where salary > 8000 union select name,salary from planer where salary < 5000;
+```
 
 小案例
 
@@ -407,7 +420,7 @@ select * from ta union all select * from tb;
 
 注意 : 与order by limit 连用需用括号来表明作用范围，以免出错。
 
-
+```
 select * from ta,tb;
 左连接
 select * from ta left join tb on ta.id = tb.id;
@@ -415,6 +428,7 @@ select * from ta left join tb on ta.id = tb.id;
 select * from ta right join tb on ta.id = tb.id;
 内链接
 select * from ta inner join tb on ta.id = tb.id;
+```
 
 小案例
 
@@ -460,3 +474,77 @@ select boy.*, girl.* from girl left join boy on boy.flower=girl.flower union sel
 清空表
 truncate stuinfo
 end
+
+
+### sequence
+
+drop table if exists sequence;  
+create table sequence (   
+  seq_name        VARCHAR(50) NOT NULL,   
+  current_val     INT         NOT NULL,     
+  increment_val   INT         NOT NULL   DEFAULT 1,      
+  PRIMARY KEY (seq_name)
+);
+
+INSERT INTO sequence VALUES ('seq_test1_num1', '0', '1');
+INSERT INTO sequence VALUES ('seq_test1_num2', '0', '2');
+
+```
+
+create function currval(v_seq_name VARCHAR(50))   
+returns integer
+begin     
+    declare value integer;       
+    set value = 0;       
+    select current_val into value  from sequence where seq_name = v_seq_name;
+   return value;
+end;
+
+
+select currval('seq_test1_num1');
+```
+
+```
+create function nextval (v_seq_name VARCHAR(50))
+    returns integer
+begin
+    update sequence set current_val = current_val + increment_val  where seq_name = v_seq_name;
+    return currval(v_seq_name);
+end;
+
+
+
+select nextval('seq_test1_num1');
+
+```
+
+test
+```
+DROP TABLE IF EXISTS `test1`;
+CREATE TABLE `test1` (
+  `name` varchar(255) NOT NULL,
+  `value` double(255,0) DEFAULT NULL,
+  `num1` int(11) DEFAULT NULL,
+  `num2` int(11) DEFAULT NULL,
+  PRIMARY KEY (`name`)
+);
+
+
+
+```
+
+trigger
+```
+
+CREATE TRIGGER `TRI_test1_num1` BEFORE INSERT ON `test1` FOR EACH ROW BEGIN
+set NEW.num1 = nextval('seq_test1_num1');
+set NEW.num2 = nextval('seq_test1_num2');
+END
+```
+
+```
+INSERT INTO test1 (name, value) VALUES ('1', '111');
+INSERT INTO test1 (name, value) VALUES ('2', '222');
+INSERT INTO test1 (name, value) VALUES ('3', '333');
+INSERT INTO test1 (name, value) VALUES ('4', '444');
+```
