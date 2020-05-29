@@ -36,7 +36,9 @@ exports.cluster = {
 
 exports.sequelize = {
     dialect:'mysql',
-    host:'127.0.0.1',
+    host:'192.168.23.176',
     port:3306,
-    database:'doc_default'
+    username: 'root',
+    password: '123456',
+    database:'sams'
 }

@@ -15,3 +15,10 @@ exports.shuffle = (arr) => {
     }
     return arr;
 };
+
+
+exports.parseInt = (string) => {
+  if (typeof string === 'number') return string;
+  if (!string) return string;
+  return parseInt(string) || 0;
+};
