@@ -22,3 +22,24 @@ exports.parseInt = (string) => {
   if (!string) return string;
   return parseInt(string) || 0;
 };
+
+const EventEmitter = require('events');
+
+/**
+ * A mock Subscriber
+ */
+exports.Subscriber = class extends EventEmitter {
+  constructor() {
+    super();
+
+    this._start();
+  }
+
+  _start() {
+    const interval = Math.random() * 5000 + 5000;
+    setTimeout(() => {
+      this.emit('changed');
+      this._start();
+    }, interval);
+  }
+};
