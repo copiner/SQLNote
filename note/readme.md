@@ -251,15 +251,25 @@ AND &&
 ```
 
 select * from planer;
+
 select name,age,tel from planer;
+
 select id,salary>6000 from planer;
+
 select name,age,tel from planer where salary>6000;
+
 select name,age,tel from planer where salary-invest>6000;
+
 select name,age,tel from planer where salary-invest>6000;
+
 select name,age,tel from planer where salary in (6000,8000);
+
 select id,name,age,tel from planer where salary between 6000 and 8000;
+
 select id,name,age,tel from planer where salary > 6000 and salary < 8000;
+
 select id,name,age,tel from planer where salary = 6000 or invest = 2000;
+
 
 通配符 %  _
 
@@ -323,12 +333,14 @@ values
 ('francis','Geography',55),
 ('Anna','Math',90);
 
-查询两门及两门以上不及格学生的平均成绩
 
 alter table student add column id int not null primary key auto_increment first;
 
+查询两门及两门以上不及格学生的平均成绩
+
 ```
 select name,score<60 from student;
+
 select name,sum(score<60) from student group by name;
 select name,sum(score<60), avg(score) as av from student group by name;
 select name,sum(score<60) as su, avg(score) as av from student group by name having su>=2;
@@ -365,8 +377,6 @@ select name,salary from planer order by salary desc limit 0,3;
 ```
 
 每个年龄工资最高的条目
-
-
 
 ```
 select p.* from planer p, (select max(salary) sly, age from  planer group by age) as t
